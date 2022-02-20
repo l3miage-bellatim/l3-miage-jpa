@@ -5,11 +5,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQuery;
 
 import java.util.Date;
 
 // TODO ajouter une named query pour une des requêtes à faire dans le repository
 @Entity
+@NamedQuery(name="Subject.findAll", query="select subject from Subject subject")
 public class Subject {
 
     @Id
