@@ -39,7 +39,7 @@ public class StudentRepositoryImpl extends BaseRepositoryImpl implements Student
     @Override
     public List<Student> getAll() {
         // TODO
-        return entityManager.createNamedQuery("StudentClass.findAll").getResultList();
+        return entityManager.createNamedQuery("Student.findAll").getResultList();
     }
 
     @Override

@@ -2,8 +2,21 @@ package fr.uga.im2ag.l3.miage.db.model;
 
 import java.util.Date;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.DiscriminatorColumn;
+
+@Inheritance(strategy=InheritanceType.JOINED)
+@Entity
+@DiscriminatorColumn(name="type")
 public abstract class Person {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private Gender gender;
     private String firstName;

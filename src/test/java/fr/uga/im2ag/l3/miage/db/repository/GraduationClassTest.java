@@ -35,6 +35,7 @@ class GraduationClassTest extends Base {
         classRepository.save(graduationClass);
         entityManager.getTransaction().commit();
         entityManager.detach(graduationClass);
+        entityManager.detach(student);
 
         var pGraduationClass = classRepository.findById(graduationClass.getId());
         assertThat(pGraduationClass).isNotNull().isNotSameAs(graduationClass);

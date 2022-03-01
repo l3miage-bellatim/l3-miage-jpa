@@ -16,11 +16,13 @@ public class Grade {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @OneToOne
+    @OneToOne //un seule note ou plusieurs
     private Subject subject;
-    @Column(name = "grade")
-    private Float value;
-    private Float weight;
+    @Column(name = "grade", updatable = false)
+    private Float value; 
+    // @Column(precision=1, scale=1) //scale nombre de chiffre apres la virgule, prec chiffres signifocatif
+    @Column
+    private Float weight;//precision ou scale de la note et le poid
 
     public Long getId() {
         return id;
