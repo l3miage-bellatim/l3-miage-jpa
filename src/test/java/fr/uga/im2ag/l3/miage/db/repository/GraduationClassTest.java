@@ -26,7 +26,6 @@ class GraduationClassTest extends Base {
 
     @Test
     void shouldSaveClass() {
-        // TODO
         final var graduationClass = Fixtures.createClass();
         final var student = Fixtures.createStudent(graduationClass);
         graduationClass.addStudent(student);
@@ -46,7 +45,19 @@ class GraduationClassTest extends Base {
 
     @Test
     void shouldFindByYearAndName() {
-        // TODO
+        final var graduationClass = Fixtures.createClass();
+        final var student = Fixtures.createStudent(graduationClass);
+        graduationClass.addStudent(student);
+        entityManager.getTransaction().begin();
+        entityManager.persist(student);
+        classRepository.save(graduationClass);
+        entityManager.getTransaction().commit();
+        entityManager.detach(graduationClass);
+        entityManager.detach(student);
+
+        var pGraduationClass = classRepository.findByYearAndName(graduationClass.getYear(), graduationClass.getName());
+        assertThat(pGraduationClass).isNotNull().isNotSameAs(graduationClass);
+        assertThat(pGraduationClass.getName()).isEqualTo(graduationClass.getName());
     }
 
 }

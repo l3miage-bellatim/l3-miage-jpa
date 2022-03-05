@@ -8,23 +8,26 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-// TODO ajouter une named query pour une des requêtes à faire dans le repository
 @Entity
 @Table(name = "graduationclass")
-@NamedQuery(name="GraduationClass.findAll", query="select graduationClass from GraduationClass graduationClass")
+@NamedQueries({
+    @NamedQuery(name="GraduationClass.findAll", query="select gc from GraduationClass gc"),
+    @NamedQuery(name="GraduationClass.findByYearAndName", query="select gc from GraduationClass gc where gc.name= :name and gc.year= :year")
+})
 public class GraduationClass {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    // @Column(nullable=false)
+    @Column(nullable=false)
     private String name;
     // @Column(nullable=false)
-    @Column(name="class_year")
+    @Column(name="class_year", nullable=false)
     private Integer year;
     // @Column
     @OneToMany(mappedBy="belongTo")
