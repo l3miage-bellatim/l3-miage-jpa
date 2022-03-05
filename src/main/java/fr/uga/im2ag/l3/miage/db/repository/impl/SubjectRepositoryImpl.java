@@ -35,14 +35,7 @@ public class SubjectRepositoryImpl extends BaseRepositoryImpl implements Subject
 
     @Override
     public List<Subject> getAll() {
-        // TODO
-        // List results = subjectFindAll.getResultList();
-        // List<Subject> subjects = new List();
-        // for (Object result : results) {
-        //     Subject subject = (Subject) result;
-
-        // }
-        Query subjectFindAll = entityManager.createNamedQuery("Subject.findAll");
+        Query subjectFindAll = entityManager.createNamedQuery("Subject.findAll", Subject.class);
         @SuppressWarnings("unchecked")
         List<Subject> subjects = subjectFindAll.getResultList();
         return subjects;
@@ -50,7 +43,6 @@ public class SubjectRepositoryImpl extends BaseRepositoryImpl implements Subject
 
     @Override
     public Collection<Teacher> findTeachers(Long id) {
-        // TODO
-        return null;
+        return entityManager.createNamedQuery("Subject.findTeachers", Teacher.class).setParameter("id", id).getResultList();
     }
 }
