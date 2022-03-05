@@ -28,7 +28,6 @@ class GradeTest extends Base {
 
     @Test
     void shouldSaveGrade() {
-        //TODO tester les autres champs ? tester la cle etrangere
         final var grade = Fixtures.createGrade(Fixtures.createSubject()); //on creer un nouvet sujet a ajouter a la note
         entityManager.getTransaction().begin();
         entityManager.persist(grade.getSubject());  //on rend le sujet de la note persistant, sinon le test lève une exception au commit
@@ -44,12 +43,28 @@ class GradeTest extends Base {
 
     @Test
     void shouldFailUpgradeGrade() {
-        // TODO, ici tester que la mise à jour n'a pas eu lieu.
+        final var LEGAL_VALUE = 1f; //note a ajouter initialement
+        final var ILLEGAL_VALUE = 3f;// note pour l'update update
+
+        final var grade = Fixtures.createGrade(Fixtures.createSubject());
+
+        grade.setValue(LEGAL_VALUE); //on ajoute la note avant le commit
+        entityManager.getTransaction().begin();
+        entityManager.persist(grade.getSubject()); 
+        gradeRepository.save(grade); //peristance de la note
+        grade.setValue(ILLEGAL_VALUE);//update illégal de la note
+        gradeRepository.save(grade);
+        entityManager.getTransaction().commit();
+        entityManager.detach(grade);
+
+        var pGrade = gradeRepository.findById(grade.getId());
+        assertThat(pGrade).isNotNull().isNotSameAs(grade);
+        assertThat(pGrade.getValue()).isNotEqualTo(ILLEGAL_VALUE).isEqualTo(LEGAL_VALUE);
     }
 
     @Test
     void shouldFindHighestGrades() {
-        final var limit = 7;
+        final var LIMIT = 7;
         final var grade = Fixtures.createGrade(Fixtures.createSubject()); //on creer un nouvet sujet a ajouter a la note
         final var grade1 = Fixtures.createGrade(Fixtures.createSubject()); //on creer un nouvet sujet a ajouter a la note
         final var grade2 = Fixtures.createGrade(Fixtures.createSubject()); //on creer un nouvet sujet a ajouter a la note
@@ -84,7 +99,7 @@ class GradeTest extends Base {
         entityManager.detach(grade3);
         entityManager.detach(grade4);
 
-        var pGrades = gradeRepository.findHighestGrades(limit);
+        var pGrades = gradeRepository.findHighestGrades(LIMIT);
         
         assertThat(pGrades).isNotNull();
         assertThat(pGrades.size()).isEqualTo(grades.size());
@@ -92,7 +107,7 @@ class GradeTest extends Base {
 
     @Test
     void shouldFindHighestGradesBySubject() {
-        final var limit=7;
+        final var LIMIT=7;
         final var subjectTest = Fixtures.createSubject();  //sujet à chercher
         final var subject = Fixtures.createSubject(); //sujet témoin
 
@@ -126,7 +141,7 @@ class GradeTest extends Base {
         entityManager.detach(grade3);
         entityManager.detach(grade4);
 
-        var pGrades = gradeRepository.findHighestGradesBySubject(limit, subjectTest);
+        var pGrades = gradeRepository.findHighestGradesBySubject(LIMIT, subjectTest);
         
         assertThat(pGrades).isNotNull();
         assertThat(pGrades.size()).isEqualTo(grades.size());
