@@ -5,23 +5,26 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 
-// TODO ajouter une named query pour une des requêtes à faire dans le repository
 @Entity
-@NamedQuery(name="Marin.findAll", query="select grade from Grade grade")
+@NamedQueries({@NamedQuery(name="Grade.findAll", query="select grade from Grade grade"),
+               @NamedQuery(name="Grade.findHighestGrades", query="select grade from Grade grade where grade.value >= :limit"),
+               @NamedQuery(name="Grade.findHighestGradesBySubject", query="select grade from Grade grade join grade.subject s where grade.value >= :limit and s.id = :id")})
+
 public class Grade {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @OneToOne //un seule note ou plusieurs
+    @OneToOne 
     private Subject subject;
     @Column(name = "grade", updatable = false)
     private Float value; 
+    // @Column
     // @Column(precision=1, scale=1) //scale nombre de chiffre apres la virgule, prec chiffres signifocatif
-    @Column
     private Float weight;//precision ou scale de la note et le poid
 
     public Long getId() {

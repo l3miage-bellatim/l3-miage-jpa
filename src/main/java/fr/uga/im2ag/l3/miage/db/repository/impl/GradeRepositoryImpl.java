@@ -20,14 +20,12 @@ public class GradeRepositoryImpl extends BaseRepositoryImpl implements GradeRepo
 
     @Override
     public List<Grade> findHighestGrades(int limit) {
-        // TODO
-        return null;
+        return entityManager.createNamedQuery("Grade.findHighestGrades").setParameter("limit", (float)limit).getResultList();
     }
 
     @Override
     public List<Grade> findHighestGradesBySubject(int limit, Subject subject) {
-        // TODO
-        return null;
+        return entityManager.createNamedQuery("Grade.findHighestGradesBySubject").setParameter("limit",(float) limit).setParameter("id", subject.getId()).getResultList();
     }
 
     @Override
