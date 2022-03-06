@@ -11,8 +11,9 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.CascadeType;
 
-// TODO ajouter une named query pour une des requêtes à faire dans le repository
+
 @Entity 
 @Table(name="student")
 @DiscriminatorValue(value="student")
@@ -24,7 +25,7 @@ public class Student extends Person {
 
     @ManyToOne
     private GraduationClass belongTo;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Grade> grades;
 
     public GraduationClass getBelongTo() {
