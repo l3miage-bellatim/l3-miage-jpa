@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -15,7 +16,10 @@ import javax.persistence.Table;
 @Entity 
 @Table(name="student")
 @DiscriminatorValue(value="student")
-@NamedQuery(name="Student.findAll", query="select student from Student student")
+@NamedQueries({
+    @NamedQuery(name="Student.findAll", query="select student from Student student"),
+    @NamedQuery(name="Student.findAboveAverage", query="select s from Student s join s.grades g group by s.id having sum(g.value*g.weight)/sum(g.weight) >= :minAvg ")
+})
 public class Student extends Person {
 
     @ManyToOne

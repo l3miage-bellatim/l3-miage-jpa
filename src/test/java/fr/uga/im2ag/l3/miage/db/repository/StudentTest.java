@@ -1,11 +1,17 @@
 package fr.uga.im2ag.l3.miage.db.repository;
 
+import fr.uga.im2ag.l3.miage.db.model.Grade;
+import fr.uga.im2ag.l3.miage.db.model.Student;
 import fr.uga.im2ag.l3.miage.db.repository.api.StudentRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.ArrayList;
+
+import org.assertj.core.util.Arrays;
 
 class StudentTest extends Base {
 
@@ -42,7 +48,102 @@ class StudentTest extends Base {
 
     @Test
     void shouldFindStudentHavingGradeAverageAbove() {
-        // TODO
+       final var AVERAGE = 5f; 
+       final var gc = Fixtures.createClass();
+       final var s1 = Fixtures.createStudent(gc);
+       final var s2 = Fixtures.createStudent(gc);
+       final var s3 = Fixtures.createStudent(gc);
+
+
+       final var subject = Fixtures.createSubject();
+       
+       final var gs1n1 =Fixtures.createGrade(subject);
+       final var gs1n2 =Fixtures.createGrade(subject);
+       final var gs2n1 =Fixtures.createGrade(subject);
+       final var gs2n2 =Fixtures.createGrade(subject);
+       final var gs3n1 =Fixtures.createGrade(subject);
+       final var gs3n2 =Fixtures.createGrade(subject);
+        //#################################################
+       gs1n1.setValue(10f);
+       gs1n1.setWeight(0.6f);
+       
+       gs1n2.setValue(10f);
+       gs1n2.setWeight(0.4f);
+
+       ArrayList<Grade> l1 = new ArrayList<>();
+       l1.add(gs1n1);
+       l1.add(gs1n2);
+       s1.setGrades(l1);
+        //#################################################
+       gs2n1.setValue(8f);
+       gs2n1.setWeight(0.6f);
+       
+       gs2n2.setValue(7f);
+       gs2n2.setWeight(0.4f);
+
+       ArrayList<Grade> l2 = new ArrayList<>();
+       l2.add(gs2n1);
+       l2.add(gs2n2);
+       s2.setGrades(l2);
+        //#################################################
+       gs3n1.setValue(2f);
+       gs3n1.setWeight(0.6f);
+       
+       gs3n2.setValue(3f);
+       gs3n2.setWeight(0.4f);
+
+       ArrayList<Grade> l3 = new ArrayList<>();
+       l3.add(gs3n1);
+       l3.add(gs3n2);
+       s3.setGrades(l3);
+        //#################################################
+
+        ArrayList<ArrayList<Grade>> grades = new ArrayList<>();
+        grades.add(l1);
+        grades.add(l2);
+        grades.add(l3);
+        ArrayList<Student> expectedStudents = new ArrayList<>();
+        expectedStudents.add(s1);
+        expectedStudents.add(s2);
+        entityManager.getTransaction().begin();
+        entityManager.persist(gc);
+        entityManager.persist(subject);
+
+        for (ArrayList<Grade> arrayList : grades) {
+            for (Grade grade : arrayList) {
+                entityManager.persist(grade);
+            }
+        }
+
+        studentRepository.save(s1);
+        studentRepository.save(s2);
+        studentRepository.save(s3);
+
+        entityManager.getTransaction().commit();
+        entityManager.detach(gc);
+        entityManager.detach(subject);
+        for (ArrayList<Grade> arrayList : grades) {
+            for (Grade grade : arrayList) {
+                 entityManager.detach(grade);
+            }
+        }
+        entityManager.detach(s1);
+        entityManager.detach(s2);
+        entityManager.detach(s3);
+
+        final var pStudents = studentRepository.findStudentHavingGradeAverageAbove(AVERAGE);
+        // for (Student student : pStudents) {
+        //     for(Grade grade: student.getGrades()){ 
+        //         System.out.println(grade.getValue());
+        //     }
+        // }
+        assertThat(pStudents).isNotNull().isNotSameAs(expectedStudents);
+        assertThat(pStudents.size()).isEqualTo(expectedStudents.size());
+
+        
+        
+
+
     }
 
 }
