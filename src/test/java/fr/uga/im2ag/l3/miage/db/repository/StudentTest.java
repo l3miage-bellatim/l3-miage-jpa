@@ -43,6 +43,7 @@ class StudentTest extends Base {
 
         var pStudent = studentRepository.findById(student.getId());
         assertThat(pStudent).isNotNull().isNotSameAs(student);
+        assertThat(pStudent.getFirstName()).isEqualTo(student.getFirstName());
     }
 
     @Test

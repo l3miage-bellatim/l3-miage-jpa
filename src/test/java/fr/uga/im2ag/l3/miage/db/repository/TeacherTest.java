@@ -26,7 +26,6 @@ class TeacherTest extends Base {
 
     @Test
     void shouldSaveTeacher()  {
-        // TODO
         final var subject = Fixtures.createSubject();
         final var graduationClass = Fixtures.createClass();
         final var student = Fixtures.createStudent(graduationClass);
@@ -45,6 +44,7 @@ class TeacherTest extends Base {
 
         var pTeacher=teacherRepository.findById(teacher.getId());
         assertThat(pTeacher).isNotNull().isNotSameAs(teacher);
+        assertThat(pTeacher.getFirstName()).isEqualTo(teacher.getFirstName());
     }
 
     @Test
