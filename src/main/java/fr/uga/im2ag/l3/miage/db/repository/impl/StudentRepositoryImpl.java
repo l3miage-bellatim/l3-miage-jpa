@@ -42,7 +42,6 @@ public class StudentRepositoryImpl extends BaseRepositoryImpl implements Student
 
     @Override
     public List<Student> findStudentHavingGradeAverageAbove(float minAverage) {
-        // TODO
         return entityManager.createNamedQuery("Student.findAboveAverage").setParameter("minAvg",(double) minAverage).getResultList();
     }
 }

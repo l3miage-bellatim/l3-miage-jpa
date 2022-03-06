@@ -31,7 +31,6 @@ class StudentTest extends Base {
 
     @Test
     void shouldSaveStudent() {
-        // TODO
         final var graduationClass = Fixtures.createClass();
         final var student = Fixtures.createStudent(graduationClass);
         graduationClass.addStudent(student);
@@ -145,5 +144,45 @@ class StudentTest extends Base {
 
 
     }
+
+    //methode de test suplémentaire pour tester update et getAll
+    @Test
+    void shouldFindAllStudentsAndUpdate() {
+        final var gc = Fixtures.createClass();
+
+        
+        ArrayList<Student> expectedStudents = new ArrayList<>();
+        for (int i = 0; i < 15; i++) {
+            expectedStudents.add(Fixtures.createStudent(gc));
+        }
+        
+        entityManager.getTransaction().begin();
+        entityManager.persist(gc);
+        for (Student student : expectedStudents) {
+            studentRepository.save(student);
+        }
+        for (Student student : expectedStudents) {
+            student.setFirstName("mamoune");
+        }
+        for (Student student : expectedStudents) {
+            studentRepository.save(student);
+        }
+        entityManager.getTransaction().commit();
+        for (Student student : expectedStudents){
+            entityManager.detach(student);
+        }
+
+        final var pStudents = studentRepository.getAll();
+        assertThat(pStudents).isNotNull().isNotSameAs(expectedStudents);
+        assertThat(pStudents.size()).isEqualTo(expectedStudents.size());
+        for (int i = 0; i < pStudents.size(); i++) {
+            System.out.println(pStudents.get(i).getFirstName());
+            assertThat(pStudents.get(i).getFirstName()).isEqualTo(expectedStudents.get(i).getFirstName());
+        }
+        
+
+
+    }
+
 
 }
