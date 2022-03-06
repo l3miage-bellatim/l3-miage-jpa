@@ -7,7 +7,10 @@ import javax.persistence.*;
 @Entity
 @Table(name="teacher")
 @DiscriminatorValue(value="teacher")
-@NamedQuery(name="Teacher.findAll", query="select teacher from Teacher teacher")
+@NamedQueries({
+    @NamedQuery(name="Teacher.findAll", query="select teacher from Teacher teacher"),
+    @NamedQuery(name="Teacher.findClassByYearAndName", query="select t from Teacher t join t.heading gc where gc.year = :year and gc.name = :name")
+})
 public class Teacher extends Person {
 
     @ManyToOne
